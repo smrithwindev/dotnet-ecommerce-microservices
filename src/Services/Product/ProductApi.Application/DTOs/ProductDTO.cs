@@ -2,7 +2,7 @@
 
 namespace ProductApi.Application.DTOs
 {
-    public record ProductDTO
+    public record ProductDto
     (
         int Id,
         [Required] string Name,

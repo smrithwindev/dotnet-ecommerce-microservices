@@ -19,7 +19,7 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
         {
             //Get all products from the repo
             var products = await _productRepository.GetAllAsync();
@@ -33,7 +33,7 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductDTO>> GetProductById(int id)
+        public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
             //Get single product from the repo
             var product = await _productRepository.FindByIdAsync(id);
@@ -62,7 +62,7 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Response>> UpdateProduct(ProductDTO productDto)
+        public async Task<ActionResult<Response>> UpdateProduct(ProductDto productDto)
         {
             //Check ModelState if all annotations are passed
             if (!ModelState.IsValid)

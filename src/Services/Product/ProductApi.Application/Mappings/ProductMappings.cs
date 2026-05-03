@@ -7,9 +7,9 @@ namespace ProductApi.Application.Mappings
         public static class ProductMappings
         {
             // 🔹 Single entity → DTO
-            public static ProductDTO ToDto(Product product)
+            public static ProductDto ToDto(Product product)
             {
-                return new ProductDTO
+                return new ProductDto
                 (
                     Id: product.Id,
                     Name: product.Name!,
@@ -19,9 +19,9 @@ namespace ProductApi.Application.Mappings
             }
 
             // 🔹 Collection → DTO list
-            public static IEnumerable<ProductDTO> ToDtoList(IEnumerable<Product> products)
+            public static IEnumerable<ProductDto> ToDtoList(IEnumerable<Product> products)
             {
-                return products.Select(p => new ProductDTO
+                return products.Select(p => new ProductDto
                 (
                     p.Id,
                     p.Name!,
@@ -31,7 +31,7 @@ namespace ProductApi.Application.Mappings
             }
 
             // 🔹 DTO → Entity
-            public static Product ToEntity(ProductDTO dto)
+            public static Product ToEntity(ProductDto dto)
             {
                 return new Product
                 {
@@ -53,7 +53,7 @@ namespace ProductApi.Application.Mappings
         }
 
         //when you only require bulk operations
-        public static IEnumerable<Product> ToEntityList(IEnumerable<ProductDTO> dtos)
+        public static IEnumerable<Product> ToEntityList(IEnumerable<ProductDto> dtos)
             {
                 return dtos.Select(dto => new Product
                 {
