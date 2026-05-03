@@ -1,9 +1,11 @@
-﻿namespace ProductApi.Application.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProductApi.Application.DTOs
 {
-    public class UpdateProductDto
-    {
-         public string Name { get; set; }
-         public Decimal Price { get; set; }
-         public int Quantity { get; set; }
-    }
+    public record UpdateProductDto
+    (
+         [Required] string Name,
+         [RequiredAttribute, DataType(DataType.Currency)] decimal Price,
+         [Required, Range(1,int.MaxValue)]int Quantity
+    );
 }
