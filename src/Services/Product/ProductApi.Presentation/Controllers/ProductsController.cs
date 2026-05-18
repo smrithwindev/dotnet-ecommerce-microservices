@@ -47,7 +47,7 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response>> CreateProduct(UpdateProductDto productDto)
+        public async Task<ActionResult<Response>> CreateProduct(ProductCreationDto productDto)
         {
             //Check ModelState if all annotations are passed
             if (!ModelState.IsValid)
