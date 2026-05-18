@@ -2,10 +2,10 @@
 
 namespace ProductApi.Application.DTOs
 {
-    public record UpdateProductDto
+    public record ProductCreationDto
     (
          [Required] string Name,
-         [RequiredAttribute, DataType(DataType.Currency)] decimal Price,
+         [Required, DataType(DataType.Currency)] decimal Price,
          [Required, Range(1,int.MaxValue)]int Quantity
     );
 }
