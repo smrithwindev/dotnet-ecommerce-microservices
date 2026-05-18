@@ -6,19 +6,19 @@ namespace ProductApi.Application.Mappings
 {
         public static class ProductMappings
         {
-            // 🔹 Single entity → DTO
+            //Single entity → DTO
             public static ProductDto ToDto(Product product)
             {
                 return new ProductDto
                 (
-                    Id: product.Id,
-                    Name: product.Name!,
-                    Quantity: product.Quantity,
-                    Price: product.Price
+                    product.Id,
+                    product.Name!,
+                    product.Quantity,
+                    product.Price
                 );
             }
 
-            // 🔹 Collection → DTO list
+            //Collection → DTO list
             public static IEnumerable<ProductDto> ToDtoList(IEnumerable<Product> products)
             {
                 return products.Select(p => new ProductDto
@@ -30,38 +30,47 @@ namespace ProductApi.Application.Mappings
                 ));
             }
 
-            // 🔹 DTO → Entity
-            public static Product ToEntity(ProductDto dto)
+             //Other way of writing the above method using method group conversion
+
+        //public static IEnumerable<ProductDto> ToDtoList(IEnumerable<Product> products) => products.Select(ToDto);
+
+        //DTO → Entity
+        public static Product ToEntity(ProductDto dto)
             {
                 return new Product
-                {
-                    Id = dto.Id,
-                    Name = dto.Name,
-                    Quantity = dto.Quantity,
-                    Price = dto.Price
-                };
+                (
+                    //Id = dto.Id,
+                    dto.Name,
+                    dto.Price,
+                    dto.Quantity
+                );
             }
 
-            public static Product ToEntity(UpdateProductDto dto)
+            public static Product ToEntity(ProductCreationDto dto)
             {
                 return new Product
-                {
-                    Name = dto.Name,
-                    Quantity = dto.Quantity,
-                    Price = dto.Price
-                };
+                (
+                    dto.Name,
+                    dto.Price,
+                    dto.Quantity
+                );
         }
 
         //when you only require bulk operations
-        public static IEnumerable<Product> ToEntityList(IEnumerable<ProductDto> dtos)
+
+        public static IEnumerable<Product> ToEntityList(IEnumerable<ProductDto> dtos) => dtos.Select(ToEntity);
+
+        /*public static IEnumerable<Product> ToEntityList(IEnumerable<ProductDto> dtos)
             {
                 return dtos.Select(dto => new Product
-                {
-                    Id = dto.Id,
-                    Name = dto.Name,
-                    Quantity = dto.Quantity,
-                    Price = dto.Price
-                });
+                (
+                    dto.Name,
+                    dto.Price,
+                    dto.Quantity
+                ));
             }
+        */
+
+
     }
 }
