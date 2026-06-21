@@ -13,8 +13,8 @@ namespace BuildingBlocks.Core.Interfaces
 
         Task<IEnumerable<T>> GetAllAsync();
 
-        Task<T> FindByIdAsync(int id);
+        Task<T?> FindByIdAsync(int id);
 
-        Task<T> GetByAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetByAsync(Expression<Func<T, bool>> predicate);
     }
 }
