@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="../../BuildingBlocks/BuildingBlocks.Core/BuildingBlocks.Core.csproj" />
+  <Project Path="../../BuildingBlocks/BuildingBlocks.Web/BuildingBlocks.Web.csproj" />
+  <Project Path="AuthenticationApi.Application/AuthenticationApi.Application.csproj" />
+  <Project Path="AuthenticationApi.Domain/AuthenticationApi.Domain.csproj" />
+  <Project Path="AuthenticationApi.Infrastructure/AuthenticationApi.Infrastructure.csproj" />
+  <Project Path="AuthenticationApi.Presentation/AuthenticationApi.Presentation.csproj" />
+</Solution>
