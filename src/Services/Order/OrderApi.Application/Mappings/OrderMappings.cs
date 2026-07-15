@@ -40,5 +40,24 @@ namespace OrderApi.Application.Mappings
         {
             return dtos.Select(ToEntity);
         }
+
+        public static Order ToEntity(CreateOrderDto dto)
+        {
+            return new Order(
+                dto.ProductId,
+                dto.ClientId,
+                dto.PurchaseQuantity
+            );
+        }
+
+        public static Order ToEntity(UpdateOrderDto dto)
+        {
+            return new Order(
+                dto.Id,
+                dto.ProductId,
+                dto.ClientId,
+                dto.PurchaseQuantity
+            );
+        }
     }
 }
