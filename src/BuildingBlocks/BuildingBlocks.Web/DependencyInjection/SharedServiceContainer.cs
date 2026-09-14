@@ -1,4 +1,6 @@
-﻿using BuildingBlocks.Web.Middleware;
+﻿using BuildingBlocks.Web.Authorization;
+using BuildingBlocks.Web.Middleware;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,6 +50,16 @@ namespace BuildingBlocks.Web.DependencyInjection
 
             // Add JWT Authentication Scheme
             JWTAuthenticationScheme.AddJWTAuthenticationScheme(services, config);
+
+            // Add Authorization
+            services.AddAuthorization();
+
+            // Add Authorization Handler
+            services.AddScoped<IAuthorizationHandler, FeaturePermissionHandler>();
+
+            // Add custom authorization policy provider
+            services.AddSingleton<IAuthorizationPolicyProvider, FeaturePermissionPolicyProvider>();
+
             return services;
         }
 
