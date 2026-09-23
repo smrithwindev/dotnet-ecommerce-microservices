@@ -11,5 +11,6 @@ namespace AuthenticationApi.Application.Interfaces
         Task<GetUserDto> GetUser(int userId);
         Task<Response> Register(AppUserDto appUserDto);
         Task<Response> Login(LoginDto loginDto);
+        Task<Response> AssignPermission(AssignPermissionDto dto);
     }
 }
