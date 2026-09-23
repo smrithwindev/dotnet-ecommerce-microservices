@@ -55,6 +55,48 @@ namespace AuthenticationApi.Infrastructure.Data.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("AuthenticationApi.Domain.Entities.UserPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PermissionLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Feature")
+                        .IsUnique();
+
+                    b.ToTable("UserPermissions");
+                });
+
+            modelBuilder.Entity("AuthenticationApi.Domain.Entities.UserPermission", b =>
+                {
+                    b.HasOne("AuthenticationApi.Domain.Entities.AppUser", "User")
+                        .WithMany("Permissions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AuthenticationApi.Domain.Entities.AppUser", b =>
+                {
+                    b.Navigation("Permissions");
+                });
 #pragma warning restore 612, 618
         }
     }

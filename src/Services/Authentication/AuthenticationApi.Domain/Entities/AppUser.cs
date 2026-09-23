@@ -10,5 +10,6 @@
         public string? Password { get; set; }
         public string? Role { get; set; }
         public DateTime DateRegistered { get; set; } = DateTime.UtcNow;
+        public ICollection<UserPermission> Permissions { get; set; } = new List<UserPermission>();
     }
 }
