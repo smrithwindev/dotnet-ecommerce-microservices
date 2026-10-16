@@ -2,6 +2,7 @@
 using AuthenticationApi.Application.Interfaces;
 using AuthenticationApi.Domain.Entities;
 using AuthenticationApi.Infrastructure.Data;
+using BuildingBlocks.Core.Authorization;
 using BuildingBlocks.Core.Responses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,8 +44,12 @@ namespace AuthenticationApi.Infrastructure.Repositories
         public async Task<Response> Register(AppUserDto appUserDto)
         {
             var getUser = await GetUserByEmail(appUserDto.Email);
-            if (getUser is null)
-                return new Response(false, $"you cannot use this email for registration");
+            //if (getUser is null)
+            //    return new Response(false, $"you cannot use this email for registration");
+            if (getUser is not null)
+            {
+                return new Response(false, "Email is already registered");
+            }
 
             var result = _context.Users.Add(new AppUser
             {
@@ -53,7 +58,7 @@ namespace AuthenticationApi.Infrastructure.Repositories
                 Address = appUserDto.Address,
                 Email = appUserDto.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(appUserDto.Password),
-                Role = appUserDto.Role
+                Role = "User"
             });
 
             await _context.SaveChangesAsync();
