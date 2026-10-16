@@ -113,5 +113,67 @@ namespace AuthenticationApi.Infrastructure.Repositories
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<Response> AssignPermission(AssignPermissionDto dto)
+        {
+            var user = await _context.Users.FindAsync(dto.UserId);
+
+            if (user is null)
+            {
+                return new Response(false, "User not found");
+            }
+
+            if (!Enum.IsDefined(dto.PermissionLevel) ||
+                dto.PermissionLevel == PermissionLevel.None)
+            {
+                return new Response(false, "Invalid permission level");
+            }
+
+            //If dto.Feature is null, calling .Trim() can throw an exception.
+
+            if (string.IsNullOrWhiteSpace(dto.Feature))
+            {
+                return new Response(false, "Feature is required");
+            }
+
+            var feature = dto.Feature.Trim().ToUpperInvariant();
+
+            if (feature != FeatureConstants.Product &&
+                feature != FeatureConstants.Order &&
+                feature != FeatureConstants.UserManagement)
+            {
+                return new Response(false, "Invalid feature");
+            }
+
+            //this checks if the user already has a permission for the specified feature.
+            //If it does, it updates the permission level; if not, it creates a new permission entry.
+
+            var existingPermission = await _context.UserPermissions 
+                .FirstOrDefaultAsync(p =>
+                    p.UserId == dto.UserId &&
+                    p.Feature == feature);
+
+            if (existingPermission is not null)
+            {
+                existingPermission.PermissionLevel = dto.PermissionLevel;
+            }
+            else
+            {
+                var permission = new UserPermission
+                {
+                    UserId = dto.UserId,
+                    Feature = feature,
+                    PermissionLevel = dto.PermissionLevel
+                };
+
+                _context.UserPermissions.Add(permission);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new Response(
+                true,
+                $"Permission assigned successfully for {feature}");
+        }
     }
 }
