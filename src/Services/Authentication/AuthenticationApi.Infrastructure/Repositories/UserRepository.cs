@@ -71,12 +71,18 @@ namespace AuthenticationApi.Infrastructure.Repositories
             if(!verifyPassword)
                 return new Response(false,"Invalid credentials");
 
-            string token = GenerateToken(getUser, _config);
+            var permissions = await _context.UserPermissions
+                .Where(p => p.UserId == getUser.Id)
+                .ToListAsync();
+
+            string token = GenerateToken(getUser,permissions,_config);
+
+            //string token = GenerateToken(getUser, _config);
 
             return new Response(true, token);
         }
 
-        public static string GenerateToken(AppUser user, IConfiguration config)
+        public static string GenerateToken(AppUser user, List<UserPermission> permissions, IConfiguration config)
         {
             var key = Encoding.UTF8.GetBytes(config.GetSection("Authentication:Key").Value!);
             var securityKey = new SymmetricSecurityKey(key);
@@ -86,8 +92,16 @@ namespace AuthenticationApi.Infrastructure.Repositories
                 new(ClaimTypes.Name, user.Name!),
                 new(ClaimTypes.Email, user.Email!),
             };
-            if(!string.IsNullOrEmpty(user.Role) || !Equals("string", user.Role))
-                claims.Add(new(ClaimTypes.Role, user.Role!));
+            if (!string.IsNullOrEmpty(user.Role) && !Equals("string", user.Role))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, user.Role!));
+            }
+
+            foreach (var permission in permissions)
+            {
+                claims.Add(new Claim("Permissions",
+                    $"{permission.Feature}:{(int)permission.PermissionLevel}"));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: config["Authentication:Issuer"],
