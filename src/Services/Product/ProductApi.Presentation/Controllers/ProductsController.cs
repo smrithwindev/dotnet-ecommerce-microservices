@@ -1,4 +1,6 @@
-﻿using BuildingBlocks.Core.Responses;
+﻿using BuildingBlocks.Core.Authorization;
+using BuildingBlocks.Core.Responses;
+using BuildingBlocks.Web.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductApi.Application.DTOs;
@@ -19,6 +21,8 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpGet]
+
+        [CustomAuthorize(FeatureConstants.Product, PermissionLevel.Read)]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
         {
             //Get all products from the repo
@@ -33,6 +37,8 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpGet("{id:int}")]
+
+        [CustomAuthorize(FeatureConstants.Product, PermissionLevel.Read)]
         public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
             //Get single product from the repo
@@ -47,6 +53,8 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpPost]
+
+        [CustomAuthorize(FeatureConstants.Product,PermissionLevel.Write)]
         public async Task<ActionResult<Response>> CreateProduct(ProductCreationDto productDto)
         {
             //Check ModelState if all annotations are passed
@@ -62,6 +70,8 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpPut]
+
+        [CustomAuthorize(FeatureConstants.Product, PermissionLevel.Write)]
         public async Task<ActionResult<Response>> UpdateProduct(ProductDto productDto)
         {
             //Check ModelState if all annotations are passed
@@ -77,6 +87,8 @@ namespace ProductApi.Presentation.Controllers
         }
 
         [HttpDelete("{id:int}")]
+
+        [CustomAuthorize(FeatureConstants.Product, PermissionLevel.FullAccess)]
         public async Task<ActionResult<Response>> DeleteProduct(int id)
         {
             var response = await _productRepository.DeleteAsync(id);
