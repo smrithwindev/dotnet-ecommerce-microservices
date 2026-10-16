@@ -23,6 +23,10 @@ namespace AuthenticationApi.Infrastructure.DependencyInjection
             //Create Dependency Injection for the services
 
             services.AddScoped<IUserRepository, UserRepository>();
+
+            //register the AuthenticationDataSeeder to seed authentication data
+            services.AddScoped<AuthenticationDataSeeder>();
+
             return services;
         }
 
